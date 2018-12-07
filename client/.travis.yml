@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t spmonkey/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run spmonkey/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t spmonkey/multi-client ./client
+  - docker build -t spmonkey/multi-nginx ./nginx
+  - docker build -t spmonkey/multi-server ./server
+  - docker build -t spmonkey/multi-worker ./worker
+
+  # Login in the locker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push spmonkey/multi-client
+  - docker push spmonkey/multi-nginx
+  - docker push spmonkey/multi-server
+  - docker push spmonkey/multi-worker
