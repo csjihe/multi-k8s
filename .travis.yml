@@ -20,6 +20,7 @@ before_install:
 script:
   - docker run spmonkey/react-test npm test -- --coverage
 
+#Read script
 deploy:
   provider: script
   script: bash ./deploy.sh
