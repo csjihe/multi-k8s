@@ -17,7 +17,7 @@ before_install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t spmonkey/react-test -f ./client/Dockerfile.dev ./client
 
-scripts:
+script:
   - docker run spmonkey/react-test npm test -- --converage
 
 deploy:
